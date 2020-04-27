@@ -17,7 +17,7 @@ function Slider(props) {
 					delay: 3000,
 					disableOnInteraction: false,
 				},
-				pagination: { el: '.swiper-pagintion' },
+				pagination: { el: '.swiper-pagination' },
 			});
 			setSliderSwiper(newSliderSwiper);
 		}
@@ -41,8 +41,8 @@ function Slider(props) {
 							</div>
 						);
 					})}
-					<div className="swiper-pagination"></div>
 				</div>
+				<div className="swiper-pagination"></div>
 			</div>
 		</SliderContainer>
 	);

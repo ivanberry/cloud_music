@@ -1,7 +1,8 @@
 import React from 'react';
 import Slider from '../../components/slider';
+import RecommendList from '../../components/list';
 
-function Recommed() {
+function Recommend() {
 	// mock data
 	const bannerList = [1, 2, 3, 4].map((item) => {
 		return {
@@ -10,7 +11,22 @@ function Recommed() {
 		};
 	});
 
-	return <Slider bannerList={bannerList}></Slider>;
+	const recommendList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => {
+		return {
+			id: 1,
+			picUrl:
+				'http://p2.music.126.net/BJlS7xkjLhNMtDLm8CXMJQ==/109951164864116863.jpg',
+			playCount: 17171122,
+			name: '朴树、许巍、李健、郑钧、老狼、赵雷',
+		};
+	});
+
+	return (
+		<>
+			<Slider bannerList={bannerList}></Slider>
+			<RecommendList recommendList={recommendList}></RecommendList>
+		</>
+	);
 }
 
-export default React.memo(Recommed);
+export default React.memo(Recommend);
