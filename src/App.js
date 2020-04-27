@@ -1,9 +1,14 @@
 import React from 'react';
 
+import { GlobalStyle } from './style';
+import { IconStyle } from './asserts/iconfont/iconfont';
+
 function App() {
     return (
         <div className="App">
-            <h1>Test</h1>
+            <GlobalStyle></GlobalStyle>
+            <IconStyle></IconStyle>
+            <i className="iconfont">&#xe62b;</i>
         </div>
     );
 }
