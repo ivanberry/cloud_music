@@ -1,6 +1,8 @@
 import React from "react";
 import Slider from "../../components/slider";
 import RecommendList from "../../components/list";
+import { Content } from "./style";
+import Scroll from "../../components/scroll";
 
 function Recommend() {
   // mock data
@@ -22,10 +24,14 @@ function Recommend() {
   });
 
   return (
-    <>
-      <Slider bannerList={bannerList} />
-      <RecommendList recommendList={recommendList} />
-    </>
+    <Content>
+      <Scroll>
+        <div>
+          <Slider bannerList={bannerList} />
+          <RecommendList recommendList={recommendList} />
+        </div>
+      </Scroll>
+    </Content>
   );
 }
 
