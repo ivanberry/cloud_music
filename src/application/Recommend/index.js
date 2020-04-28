@@ -1,38 +1,61 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "../../components/slider";
 import RecommendList from "../../components/list";
 import { Content } from "./style";
 import Scroll from "../../components/scroll";
 
-function Recommend() {
-  // mock data
-  const bannerList = [1, 2, 3, 4].map(item => {
-    return {
-      imageUrl:
-        "http://p1.music.126.net/9SLtTHB8Fz4txaNmMiThBA==/109951164941385278.jpg?imageView&quality=89"
-    };
-  });
+import * as actionTypes from "./store/actionCreators";
+import { connect } from "react-redux";
 
-  const recommendList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => {
-    return {
-      id: 1,
-      picUrl:
-        "http://p2.music.126.net/BJlS7xkjLhNMtDLm8CXMJQ==/109951164864116863.jpg",
-      playCount: 17171122,
-      name: "朴树、许巍、李健、郑钧、老狼、赵雷"
-    };
-  });
+function Recommend(props) {
+  const {
+    bannerList,
+    recommendList,
+    getBannerDataDispatch,
+    getRecommendListDataDispatch
+  } = props;
+
+  useEffect(() => {
+    getBannerDataDispatch();
+    getRecommendListDataDispatch();
+  }, []);
 
   return (
     <Content>
       <Scroll>
         <div>
-          <Slider bannerList={bannerList} />
-          <RecommendList recommendList={recommendList} />
+          <Slider bannerList={bannerList || []} />
+          <RecommendList recommendList={recommendList || []} />
         </div>
       </Scroll>
     </Content>
   );
 }
 
-export default React.memo(Recommend);
+// 映射state为组件props
+const mapStateToProps = state => {
+  const {
+    recommend: { bannerList, recommendList }
+  } = state;
+  return {
+    bannerList,
+    recommendList
+  };
+};
+
+// 映射部分dispatch为组件props
+const mapDispatchToProps = dispatch => {
+  return {
+    getBannerDataDispatch() {
+      dispatch(actionTypes.getBannerList());
+    },
+    getRecommendListDataDispatch() {
+      dispatch(actionTypes.getRecommendList());
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(Recommend));
