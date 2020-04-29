@@ -3,7 +3,7 @@
  * @Author: header.css@gmail.com
  * @Date: 2020/4/29
  */
-import React, {useCallback, useEffect, useRef} from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Scroll from "../../components/scroll";
@@ -27,7 +27,7 @@ function Horizon(props) {
   }, []);
 
   // TODO 2020/4/29 : 为什么每次调用组件，都会渲染两次呢？
-  console.log('xxx', curVal);
+  console.log("xxx", curVal);
 
   // TODO 2020/4/29 : 如何优化onClick导致的回调产生的多次渲染
   return (
@@ -41,8 +41,8 @@ function Horizon(props) {
               <ListItem
                 key={item.key}
                 className={`${curVal === item.key ? "selected" : ""}`}
-                onClick={() => handleClick(item.key)}
-                onTouchEnd={() => handleClick(item.key)}
+                onClick={handleClick.bind(null, item.key)}
+                onTouchEnd={handleClick.bind(null, item.key)}
               >
                 {item.name}
               </ListItem>

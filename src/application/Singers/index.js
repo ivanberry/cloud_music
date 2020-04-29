@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import Horizon from "../../baseUI/horizon-item";
 import { NavContainer } from "./style";
+import {func} from "prop-types";
 
 // mock data
 export const categoryTypes = [
@@ -178,13 +179,13 @@ function Singers() {
   const [category, setCategory] = useState("");
   const [alpha, setAlpha] = useState("");
 
-  const handleUpdateAlpha = val => {
-    setAlpha(val);
-  };
+  function handleUpdateAlpha(val) {
+  	setAlpha(val);
+  }
 
-  const handleUpdateCategory = val => {
-    setCategory(val);
-  };
+  function handleUpdateCategory(val) {
+  	setCategory(val);
+  }
 
   return (
     // TODO 2020/4/29 :  歌手筛选页面
