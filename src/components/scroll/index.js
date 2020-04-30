@@ -8,6 +8,7 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState
 } from "react";
@@ -15,6 +16,7 @@ import PropTypes from "prop-types";
 import BScroll from "better-scroll";
 import { PullDownLoader, PullUpLoader, ScrollContainer } from "./style";
 import Loading from "../../baseUI/loading";
+import { debounce } from "../../api/utils";
 
 const Scroll = forwardRef((props, ref) => {
   // TODO 2020/4/28 tab: 编写组件
@@ -34,7 +36,19 @@ const Scroll = forwardRef((props, ref) => {
     onScroll
   } = props;
 
-  console.log('up loading: ', pullDownLoading);
+  const pullUpDebounce = useMemo(
+    () => {
+      return debounce(pullUp, 300);
+    },
+    [pullUp]
+  );
+
+  const pullDownDebounce = useMemo(
+    () => {
+      return debounce(pullDown, 300);
+    },
+    [pullDown]
+  );
 
   // create better-scroll instance
   useEffect(() => {
@@ -78,32 +92,34 @@ const Scroll = forwardRef((props, ref) => {
   useEffect(
     () => {
       if (!bScroll || !pullUp) return;
-      bScroll.on("scrollEnd", () => {
-        // 是否到底部
+      const handlePullUp = () => {
         if (bScroll.y <= bScroll.maxScrollY + 100) {
-          pullUp();
+          pullUpDebounce();
         }
-      });
+      };
+
+      bScroll.on("scrollEnd", handlePullUp);
       return () => {
-        bScroll.off("scrollEnd");
+        bScroll.off("scrollEnd", handlePullUp);
       };
     },
-    [bScroll, pullUp]
+    [bScroll, pullUp, pullUpDebounce]
   );
 
   useEffect(
     () => {
       if (!bScroll || !pullDown) return;
-      bScroll.on("touchEnd", pos => {
+      const handlePullDown = pos => {
         if (pos.y > 50) {
-          pullDown();
+          pullDownDebounce();
         }
-      });
+      };
+      bScroll.on("touchEnd", handlePullDown);
       return () => {
-        bScroll.off("touchEnd");
+        bScroll.off("touchEnd", handlePullDown);
       };
     },
-    [bScroll, pullDown]
+    [bScroll, pullDown, pullDownDebounce]
   );
 
   // 暴露组件方法
