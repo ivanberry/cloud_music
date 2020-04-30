@@ -1,7 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import LazyLoad, { forceCheck } from "react-lazyload";
+
 import Horizon from "../../baseUI/horizon-item";
-import { NavContainer } from "./style";
-import {func} from "prop-types";
+import { List, ListContainer, NavContainer } from "./style";
+import Scroll from "../../components/scroll";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { actionTypes } from "./store";
 
 // mock data
 export const categoryTypes = [
@@ -179,30 +183,73 @@ function Singers() {
   const [category, setCategory] = useState("");
   const [alpha, setAlpha] = useState("");
 
+  const dispatch = useDispatch();
+  /**
+   * 利用useSelector获取redux中的数据
+   */
+  const hotSingerList = useSelector(state => {
+    const { singers } = state;
+    return singers.list;
+  }, shallowEqual);
+
+  /**
+   * 获取歌手列表数据
+   */
+  useEffect(() => {
+    dispatch(actionTypes.getHotSingerList());
+  }, []);
+
   function handleUpdateAlpha(val) {
-  	setAlpha(val);
+    setAlpha(val);
   }
 
   function handleUpdateCategory(val) {
-  	setCategory(val);
+    setCategory(val);
+  }
+
+  function singerListRender() {
+    return (
+      <List>
+        {hotSingerList.map(item => {
+          return (
+            <div key={item.id}>
+              <LazyLoad
+                placeholder={<img src={require("../../asserts/avatar.png")} />}
+              >
+                <img src={item.picUrl} alt="歌手图片" />
+              </LazyLoad>
+              <span className={"title"}>{item.name}</span>
+              <span className="iconfont heart">&#xe6fc;</span>
+            </div>
+          );
+        })}
+      </List>
+    );
   }
 
   return (
     // TODO 2020/4/29 :  歌手筛选页面
-    <NavContainer>
-      <Horizon
-        list={categoryTypes}
-        handleClick={handleUpdateCategory}
-        title={"分类（默认热门）"}
-        curVal={category}
-      />
-      <Horizon
-        list={alphaTypes}
-        handleClick={handleUpdateAlpha}
-        title={"歌手首字母"}
-        curVal={alpha}
-      />
-    </NavContainer>
+    <>
+      <NavContainer>
+        <Horizon
+          list={categoryTypes}
+          handleClick={handleUpdateCategory}
+          title={"分类（默认热门）"}
+          curVal={category}
+        />
+        <Horizon
+          list={alphaTypes}
+          handleClick={handleUpdateAlpha}
+          title={"歌手首字母"}
+          curVal={alpha}
+        />
+      </NavContainer>
+      <ListContainer>
+        <Scroll onScroll={forceCheck}>
+          <div>{singerListRender()}</div>
+        </Scroll>
+      </ListContainer>
+    </>
   );
 }
 

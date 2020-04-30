@@ -27,7 +27,7 @@ function Horizon(props) {
   }, []);
 
   // TODO 2020/4/29 : 为什么每次调用组件，都会渲染两次呢？
-  console.log("xxx", curVal);
+  // console.log("xxx", curVal);
 
   // TODO 2020/4/29 : 如何优化onClick导致的回调产生的多次渲染
   return (
