@@ -7,6 +7,7 @@ import Scroll from "../../components/scroll";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { actionTypes } from "./store";
 import Loading from "../../components/loading";
+import {changeEnterLoading} from "./store/actionCreator";
 
 // mock data
 export const categoryTypes = [
@@ -225,14 +226,24 @@ function Singers() {
     setCategory(val);
   }
 
+  // 加载更多
   function handlePullUpDispatch() {
     // TODO 2020/4/30 : pull up ui
     dispatch(actionTypes.changePullUpLoading(true));
+    if (category === '' && alpha === '') {
+      // 加载更多热门
+      dispatch(actionTypes.refreshMoreHotSingerList())
+    } else {
+      dispatch(actionTypes.refreshMoreSingerList(category, alpha));
+    }
+    dispatch(actionTypes.changePullUpLoading(false));
   }
 
+  // 重新加载
   function handlePullDownDispatch() {
     // TODO 2020/4/30 : 下拉刷新逻辑
-    dispatch(actionTypes.changePullDownLoading(true));
+	  dispatch(actionTypes.changeEnterLoading(true));
+    dispatch(actionTypes.getSingerList(category, alpha));
   }
 
   function singerListRender() {

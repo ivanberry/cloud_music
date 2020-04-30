@@ -100,8 +100,8 @@ export const refreshMoreHotSingerList = () => {
 
 /**
  * 获取歌手列表
- * @param category
- * @param alpha
+ * @param category: 分类
+ * @param alpha: 首字母类别
  * @return {function(...[*]=)}
  */
 export const getSingerList = (category, alpha) => {
@@ -111,6 +111,7 @@ export const getSingerList = (category, alpha) => {
         const { artists } = res;
         dispatch(changeOffset(artists.length));
         dispatch(changeSingerList(artists));
+        // TODO 2020/5/1 : 如何绑定不同的loading状态呢？
         dispatch(changeEnterLoading(false));
       })
       .catch(err => console.log(err));
