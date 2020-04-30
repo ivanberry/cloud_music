@@ -77,7 +77,7 @@ const Scroll = forwardRef((props, ref) => {
       if (!bScroll || !pullUp) return;
       bScroll.on("scrollEnd", () => {
         // 是否到底部
-        if (bScroll.y <= bScroll.maxScrllY + 100) {
+        if (bScroll.y <= bScroll.maxScrollY + 100) {
           pullUp();
         }
       });

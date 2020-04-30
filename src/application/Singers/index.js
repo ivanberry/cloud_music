@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LazyLoad, { forceCheck } from "react-lazyload";
 
 import Horizon from "../../baseUI/horizon-item";
-import { List, ListContainer, NavContainer } from "./style";
+import { List, ListContainer, ListItem, NavContainer } from "./style";
 import Scroll from "../../components/scroll";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { actionTypes } from "./store";
+import Loading from "../../components/loading";
 
 // mock data
 export const categoryTypes = [
@@ -187,9 +188,9 @@ function Singers() {
   /**
    * 利用useSelector获取redux中的数据
    */
-  const hotSingerList = useSelector(state => {
+  const { list: hotSingerList, enterLoading } = useSelector(state => {
     const { singers } = state;
-    return singers.list;
+    return singers;
   }, shallowEqual);
 
   /**
@@ -199,12 +200,31 @@ function Singers() {
     dispatch(actionTypes.getHotSingerList());
   }, []);
 
+  /**
+   * 需要联动列表
+   * @param val
+   */
   function handleUpdateAlpha(val) {
+    dispatch(actionTypes.changeOffset(0));
+    dispatch(actionTypes.changeEnterLoading(true));
+    dispatch(actionTypes.getSingerList(category, val));
     setAlpha(val);
   }
 
   function handleUpdateCategory(val) {
+    dispatch(actionTypes.changeOffset(0));
+    dispatch(actionTypes.changeEnterLoading(true));
+    dispatch(actionTypes.getSingerList(val, alpha));
     setCategory(val);
+  }
+
+  function handlePullUpDispatch() {
+    // TODO 2020/4/30 : pullup ui
+    dispatch(actionTypes.refreshMoreHotSingerList());
+  }
+
+  function handlePullDownDispatch() {
+
   }
 
   function singerListRender() {
@@ -212,15 +232,19 @@ function Singers() {
       <List>
         {hotSingerList.map(item => {
           return (
-            <div key={item.id}>
-              <LazyLoad
-                placeholder={<img src={require("../../asserts/avatar.png")} />}
-              >
-                <img src={item.picUrl} alt="歌手图片" />
-              </LazyLoad>
+            <ListItem key={item.id}>
+              <div className="img_wrapper">
+                <LazyLoad
+                  placeholder={
+                    <img src={require("../../asserts/avatar.png")} />
+                  }
+                >
+                  <img src={item.picUrl} alt="歌手图片" />
+                </LazyLoad>
+              </div>
               <span className={"title"}>{item.name}</span>
               <span className="iconfont heart">&#xe6fc;</span>
-            </div>
+            </ListItem>
           );
         })}
       </List>
@@ -245,8 +269,10 @@ function Singers() {
         />
       </NavContainer>
       <ListContainer>
-        <Scroll onScroll={forceCheck}>
-          <div>{singerListRender()}</div>
+        <Scroll pullUp={handlePullUpDispatch} onScroll={forceCheck}>
+          <div style={{ minHeight: "100%" }}>
+            {enterLoading ? <Loading /> : singerListRender()}
+          </div>
         </Scroll>
       </ListContainer>
     </>

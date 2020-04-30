@@ -30,26 +30,36 @@ export const List = styled.div`
   margin: auto;
   flex-direction: column;
   overflow: hidden;
-  div {
-    margin: 2px 6px;
-    padding: 10px 2px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .iconfont{
-    color: ${style["iconfont-red"]};
-    font-size: ${style["font-size-s"]};
-  }
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
-  }
   .title {
     margin: 10px 0 10px 10px;
     color: ${style["font-color-desc"]};
     font-size: ${style["font-size-s"]};
     flex: 1;
+  }
+`;
+
+export const ListItem = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  margin: 0 5px;
+  padding: 5px 0;
+  align-items: center;
+  border-bottom: 1px solid ${style["border-color"]};
+  .img_wrapper {
+    margin-right: 20px;
+    img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+    }
+  }
+  .name {
+    font-size: ${style["font-size-m"]};
+    color: ${style["font-color-desc"]};
+    font-weight: 500;
+  }
+  .iconfont {
+    color: ${style["iconfont-red"]};
+    font-size: ${style["font-size-s"]};
   }
 `;
