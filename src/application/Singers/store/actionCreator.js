@@ -92,7 +92,7 @@ export const refreshMoreHotSingerList = () => {
         const result = [...list, ...artists];
         dispatch(changeOffset(result.length));
         dispatch(changeSingerList(result));
-        dispatch(changeEnterLoading(false));
+        dispatch(changePullUpLoading(false));
       })
       .catch(err => console.log(err));
   };

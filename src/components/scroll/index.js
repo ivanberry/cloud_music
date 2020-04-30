@@ -13,7 +13,8 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import BScroll from "better-scroll";
-import { ScrollContainer } from "./style";
+import { PullDownLoader, PullUpLoader, ScrollContainer } from "./style";
+import Loading from "../../baseUI/loading";
 
 const Scroll = forwardRef((props, ref) => {
   // TODO 2020/4/28 tab: 编写组件
@@ -32,6 +33,8 @@ const Scroll = forwardRef((props, ref) => {
     pullDown,
     onScroll
   } = props;
+
+  console.log('up loading: ', pullDownLoading);
 
   // create better-scroll instance
   useEffect(() => {
@@ -111,9 +114,24 @@ const Scroll = forwardRef((props, ref) => {
     getBScroll: () => bScroll
   }));
 
+  const pullUpdisplayStyle = pullUpLoading
+    ? { display: "" }
+    : { display: "none" };
+  const pullDowndisplayStyle = pullDownLoading
+    ? { display: "" }
+    : { display: "none" };
+
   // TODO 2020/4/28 tab: UI
   return (
-    <ScrollContainer ref={scrollContainerRef}>{props.children}</ScrollContainer>
+    <ScrollContainer ref={scrollContainerRef}>
+      {props.children}
+      <PullDownLoader style={pullDowndisplayStyle}>
+        <Loading />
+      </PullDownLoader>
+      <PullUpLoader style={pullUpdisplayStyle}>
+        <Loading />
+      </PullUpLoader>
+    </ScrollContainer>
   );
 });
 

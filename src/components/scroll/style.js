@@ -6,7 +6,29 @@
 import styled from "styled-components";
 
 export const ScrollContainer = styled.div`
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+
+// TODO 2020/4/30 : pull down director
+export const PullDownLoader = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 2;
+`;
+
+// TODO 2020/4/30 : pull up  director
+export const PullUpLoader = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 5px;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  z-index: 2;
 `;

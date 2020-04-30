@@ -16,6 +16,7 @@ const initialState = {
 };
 
 export default produce((draft = initialState, action) => {
+  console.log(action);
   switch (action.type) {
     case CHANGE_SINGER_LIST:
       draft.list = action.data;

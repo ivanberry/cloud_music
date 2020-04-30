@@ -188,10 +188,17 @@ function Singers() {
   /**
    * 利用useSelector获取redux中的数据
    */
-  const { list: hotSingerList, enterLoading } = useSelector(state => {
+  const {
+    list: hotSingerList,
+    enterLoading,
+    pullUpLoading,
+    pullDownLoading
+  } = useSelector(state => {
     const { singers } = state;
     return singers;
   }, shallowEqual);
+
+  console.log('pull down: ', pullDownLoading);
 
   /**
    * 获取歌手列表数据
@@ -219,11 +226,14 @@ function Singers() {
   }
 
   function handlePullUpDispatch() {
-    // TODO 2020/4/30 : pullup ui
-    dispatch(actionTypes.refreshMoreHotSingerList());
+    // TODO 2020/4/30 : pull up ui
+    dispatch(actionTypes.changePullUpLoading(true));
   }
 
-  function handlePullDownDispatch() {}
+  function handlePullDownDispatch() {
+    // TODO 2020/4/30 : 下拉刷新逻辑
+    dispatch(actionTypes.changePullDownLoading(true));
+  }
 
   function singerListRender() {
     return (
@@ -270,6 +280,8 @@ function Singers() {
         <Scroll
           pullDown={handlePullDownDispatch}
           pullUp={handlePullUpDispatch}
+          pullDownLoading={pullDownLoading}
+          // pullUpLoading={pullUpLoading}
           onScroll={forceCheck}
         >
           <div style={{ minHeight: "100%" }}>
