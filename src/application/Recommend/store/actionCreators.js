@@ -4,7 +4,7 @@
  * @Date: 2020/4/28
  */
 
-import * as actionTypes from "./contants";
+import * as actionTypes from "../../../constants";
 import {
   getBannerRequest,
   getRecommendListRequest

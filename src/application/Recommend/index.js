@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { forceCheck } from "react-lazyload";
+
 import Slider from "../../components/slider";
 import RecommendList from "../../components/list";
 import { Content } from "./style";
@@ -6,13 +8,15 @@ import Scroll from "../../components/scroll";
 
 import * as actionTypes from "./store/actionCreators";
 import { connect } from "react-redux";
+import Loading from "../../components/loading";
 
 function Recommend(props) {
   const {
     bannerList,
     recommendList,
     getBannerDataDispatch,
-    getRecommendListDataDispatch
+    getRecommendListDataDispatch,
+    enterLoading
   } = props;
 
   useEffect(() => {
@@ -22,12 +26,16 @@ function Recommend(props) {
 
   return (
     <Content>
-      <Scroll>
-        <div>
-          <Slider bannerList={bannerList || []} />
-          <RecommendList recommendList={recommendList || []} />
-        </div>
-      </Scroll>
+      {enterLoading ? (
+        <Loading />
+      ) : (
+        <Scroll onScroll={forceCheck}>
+          <div>
+            <Slider bannerList={bannerList || []} />
+            <RecommendList recommendList={recommendList || []} />
+          </div>
+        </Scroll>
+      )}
     </Content>
   );
 }
@@ -35,11 +43,12 @@ function Recommend(props) {
 // 映射state为组件props
 const mapStateToProps = state => {
   const {
-    recommend: { bannerList, recommendList }
+    recommend: { bannerList, recommendList, enterLoading }
   } = state;
   return {
     bannerList,
-    recommendList
+    recommendList,
+    enterLoading
   };
 };
 
