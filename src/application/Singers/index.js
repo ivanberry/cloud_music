@@ -223,9 +223,7 @@ function Singers() {
     dispatch(actionTypes.refreshMoreHotSingerList());
   }
 
-  function handlePullDownDispatch() {
-
-  }
+  function handlePullDownDispatch() {}
 
   function singerListRender() {
     return (
@@ -269,7 +267,11 @@ function Singers() {
         />
       </NavContainer>
       <ListContainer>
-        <Scroll pullUp={handlePullUpDispatch} onScroll={forceCheck}>
+        <Scroll
+          pullDown={handlePullDownDispatch}
+          pullUp={handlePullUpDispatch}
+          onScroll={forceCheck}
+        >
           <div style={{ minHeight: "100%" }}>
             {enterLoading ? <Loading /> : singerListRender()}
           </div>
