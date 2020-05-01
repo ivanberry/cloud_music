@@ -9,6 +9,7 @@ import Scroll from "../../components/scroll";
 import * as actionTypes from "./store/actionCreators";
 import { connect } from "react-redux";
 import Loading from "../../components/loading";
+import { renderRoutes } from "react-router-config";
 
 function Recommend(props) {
   const {
@@ -36,6 +37,7 @@ function Recommend(props) {
           </div>
         </Scroll>
       )}
+      {renderRoutes(props.route.routes)}
     </Content>
   );
 }
