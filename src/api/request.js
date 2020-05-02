@@ -22,13 +22,34 @@ export const getRecommendListRequest = () => {
   return axiosInstance.get("/personalized");
 };
 
+/**
+ * 获取热门歌手列表
+ * @param count
+ * @return {Promise<AxiosResponse<any>>}
+ */
 export const getHotSingerListRequest = count => {
   return axiosInstance.get(`/top/artists?offset=${count}`);
 };
 
+/**
+ * 获取特地歌手列表
+ * @param category
+ * @param alpha
+ * @param count
+ * @return {Promise<AxiosResponse<any>>}
+ */
 export const getSingerListRequest = (category, alpha, count) => {
   return axiosInstance.get(
     `/artist/list?cat=${category}&initial=${alpha &&
       alpha.toLowerCase()}&offset=${count}`
   );
+};
+
+/**
+ * 获取专辑详情
+ * @param id
+ * @return {Promise<AxiosResponse<any>>}
+ */
+export const getAlbumDetailRequest = id => {
+  return axiosInstance.get(`/playlist/detail?id=${id}`);
 };
