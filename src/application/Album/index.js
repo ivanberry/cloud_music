@@ -4,7 +4,7 @@
  * @Date: 2020/5/1
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import { Container, Menu, SongItem, SongList, TopDesc } from "./style";
@@ -14,9 +14,7 @@ import { getCount, getName } from "../../api/utils";
 import style from "../../asserts/global-style";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../baseUI/loading";
-import {
-  getAlbumList
-} from "./store/actionCreator";
+import { getAlbumList } from "./store/actionCreator";
 
 const HEADER_HEIGHT = 45;
 
@@ -43,27 +41,32 @@ function Album(props) {
     [id]
   );
 
-  const handleBack = () => {
+  // 函数属性可以利用useCallback包裹，可以减少因为每次父组件
+  // 执行时，生成了不同的匿名函数
+  const handleBack = useCallback(() => {
     setShowStatus(false);
-  };
+  }, []);
 
-  const handleScroll = pos => {
-    let minScrollY = -HEADER_HEIGHT;
-    let percent = Math.abs(pos.y / minScrollY);
-    let headerDom = headerEl.current;
+  const handleScroll = useCallback(
+    pos => {
+      let minScrollY = -HEADER_HEIGHT;
+      let percent = Math.abs(pos.y / minScrollY);
+      let headerDom = headerEl.current;
 
-    if (pos.y < minScrollY) {
-      headerDom.style.background = style["theme-color"];
-      headerDom.style.opacity = Math.min(1, (percent - 1) / 2);
-      setTitle(currentAlbum.name);
-      setIsMarquee(true);
-    } else {
-      headerDom.style.backgroundColor = "";
-      headerDom.style.opacity = 1;
-      setTitle("歌单");
-      setIsMarquee(false);
-    }
-  };
+      if (pos.y < minScrollY) {
+        headerDom.style.background = style["theme-color"];
+        headerDom.style.opacity = Math.min(1, (percent - 1) / 2);
+        setTitle(currentAlbum.name);
+        setIsMarquee(true);
+      } else {
+        headerDom.style.backgroundColor = "";
+        headerDom.style.opacity = 1;
+        setTitle("歌单");
+        setIsMarquee(false);
+      }
+    },
+    [currentAlbum]
+  );
 
   const headerEl = useRef();
 
