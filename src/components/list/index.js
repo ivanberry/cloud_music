@@ -8,7 +8,6 @@ function RecommendList(props) {
   const { recommendList } = props;
 
   const enterDetail = id => {
-    console.log("id: ", id);
     props.history.push(`/recommend/${id}`);
   };
 

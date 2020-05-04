@@ -6,6 +6,7 @@
 
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import style from "../../asserts/global-style";
 
 const HeaderContainer = styled.div`
@@ -46,5 +47,11 @@ const Header = React.forwardRef((props, ref) => {
     </HeaderContainer>
   );
 });
+
+Header.propTypes = {
+  handleClick: PropTypes.func,
+  title: PropTypes.string,
+  isMarquee: PropTypes.bool
+};
 
 export default React.memo(Header);

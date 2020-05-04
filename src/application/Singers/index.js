@@ -7,7 +7,7 @@ import Scroll from "../../components/scroll";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { actionTypes } from "./store";
 import Loading from "../../components/loading";
-import {changeEnterLoading} from "./store/actionCreator";
+import { renderRoutes } from "react-router-config";
 
 // mock data
 export const categoryTypes = [
@@ -181,7 +181,7 @@ export const alphaTypes = [
   }
 ];
 
-function Singers() {
+function Singers(props) {
   const [category, setCategory] = useState("");
   const [alpha, setAlpha] = useState("");
 
@@ -198,8 +198,6 @@ function Singers() {
     const { singers } = state;
     return singers;
   }, shallowEqual);
-
-  console.log('pull down: ', pullDownLoading);
 
   /**
    * 获取歌手列表数据
@@ -230,9 +228,9 @@ function Singers() {
   function handlePullUpDispatch() {
     // TODO 2020/4/30 : pull up ui
     dispatch(actionTypes.changePullUpLoading(true));
-    if (category === '' && alpha === '') {
+    if (category === "" && alpha === "") {
       // 加载更多热门
-      dispatch(actionTypes.refreshMoreHotSingerList())
+      dispatch(actionTypes.refreshMoreHotSingerList());
     } else {
       dispatch(actionTypes.refreshMoreSingerList(category, alpha));
     }
@@ -242,8 +240,12 @@ function Singers() {
   // 重新加载
   function handlePullDownDispatch() {
     // TODO 2020/4/30 : 下拉刷新逻辑
-	  dispatch(actionTypes.changeEnterLoading(true));
+    dispatch(actionTypes.changeEnterLoading(true));
     dispatch(actionTypes.getSingerList(category, alpha));
+  }
+
+  function enterSingerDetail(id) {
+    props.history.push(`/singers/${id}`);
   }
 
   function singerListRender() {
@@ -251,7 +253,7 @@ function Singers() {
       <List>
         {hotSingerList.map(item => {
           return (
-            <ListItem key={item.id}>
+            <ListItem onClick={() => enterSingerDetail(item.id)} key={item.id}>
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -300,6 +302,7 @@ function Singers() {
           </div>
         </Scroll>
       </ListContainer>
+      {renderRoutes(props.route.routes)}
     </>
   );
 }

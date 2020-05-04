@@ -7,14 +7,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 
-import { Container, Menu, SongItem, SongList, TopDesc } from "./style";
+import { Container, Menu, TopDesc } from "./style";
 import Header from "../../baseUI/header";
 import Scroll from "../../components/scroll";
-import { getCount, getName } from "../../api/utils";
 import style from "../../asserts/global-style";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../baseUI/loading";
 import { getAlbumList } from "./store/actionCreator";
+import SongsList from "../SongList";
 
 const HEADER_HEIGHT = 45;
 
@@ -35,7 +35,6 @@ function Album(props) {
 
   useEffect(
     () => {
-      console.log("invoke");
       dispatch(getAlbumList(id));
     },
     [id]
@@ -69,6 +68,14 @@ function Album(props) {
   );
 
   const headerEl = useRef();
+
+  const songListProps = {
+    songs: currentAlbum.tracks,
+    showStatus: true,
+    showBackground: true,
+    showCollect: true,
+    collectCount: currentAlbum.subscribedCount
+  };
 
   return (
     <CSSTransition
@@ -133,38 +140,7 @@ function Album(props) {
                   更多
                 </div>
               </Menu>
-              <SongList>
-                <div className="first_line">
-                  <div className="play_all">
-                    <i className="iconfont">&#xe6e3;</i>
-                    <span>
-                      播放全部{" "}
-                      <span className="sum">
-                        (共 {currentAlbum.tracks.length})
-                      </span>
-                    </span>
-                  </div>
-                  <div className="add_list">
-                    <i className="iconfont">&#xe62d;</i>
-                    <span>收藏 ({getCount(currentAlbum.subscribedCount)})</span>
-                  </div>
-                </div>
-                <SongItem>
-                  {currentAlbum.tracks.map((item, index) => {
-                    return (
-                      <li key={index}>
-                        <span className="index">{index + 1}</span>
-                        <div className="info">
-                          <span>{item.name}</span>
-                          <span>
-                            {getName(item.ar)}-{item.al.name}
-                          </span>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </SongItem>
-              </SongList>
+              <SongsList {...songListProps} />
             </div>
           </Scroll>
         )}
