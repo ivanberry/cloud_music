@@ -6,7 +6,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { CollectButton, Container, ImgWrapper, SongListWrapper } from "./style";
+import {
+  ByLayer,
+  CollectButton,
+  Container,
+  ImgWrapper,
+  SongListWrapper
+} from "./style";
 import Header from "../../baseUI/header";
 import Scroll from "../../components/scroll";
 import SongsList from "../SongList";
@@ -119,7 +125,7 @@ function Singer(props) {
 
   useEffect(() => {
     const h = imageWrapper.current.offsetHeight;
-    songsScrollWrapper.current.style.top = `${h + OFFSET}px`;
+    songsScrollWrapper.current.style.top = `${h - OFFSET}px`;
 
     console.log(songsScroll);
     // songsScroll.current.refresh();
@@ -141,9 +147,14 @@ function Singer(props) {
           <i className="iconfont">&#xe62d;</i>
           <span className="text">收藏</span>
         </CollectButton>
+        {/*<ByLayer/>*/}
         <SongListWrapper ref={songsScrollWrapper}>
           <Scroll ref={songsScroll}>
-            <SongsList songs={artist.hotSongs} showCollect={false} />
+            <SongsList
+              showBackground={true}
+              songs={artist.hotSongs}
+              showCollect={false}
+            />
           </Scroll>
         </SongListWrapper>
       </Container>

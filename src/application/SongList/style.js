@@ -9,10 +9,9 @@ import style from "../../asserts/global-style";
 
 export const SongList = styled.div`
   border-radius: 10px;
-  opacity: 0.8;
   ${props =>
     props.showBackground
-      ? `background: ${style["hightlight-background-color"]}`
+      ? `background: ${style["highlight-background-color"]}`
       : ""};
   .first_line {
     box-sizing: border-box;

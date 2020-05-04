@@ -33,7 +33,7 @@ const Scroll = forwardRef((props, ref) => {
     bounceBottom,
     pullUp,
     pullDown,
-    onScroll
+    onScroll,
   } = props;
 
   const pullUpDebounce = useMemo(
@@ -173,8 +173,7 @@ Scroll.defaultProps = {
   pullDownLoading: false,
   pullUp: null,
   pullDown: null,
-  bounceTop: true,
-  bounceBottom: true
+  bounceTop: true
 };
 
 export default Scroll;
