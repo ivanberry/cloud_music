@@ -16,7 +16,7 @@ import Loading from "../../baseUI/loading";
 import { getAlbumList } from "./store/actionCreator";
 import SongsList from "../SongList";
 
-const HEADER_HEIGHT = 45;
+export const HEADER_HEIGHT = 45;
 
 function Album(props) {
   const [showStatus, setShowStatus] = useState(true);
