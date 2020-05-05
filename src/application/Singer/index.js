@@ -123,30 +123,33 @@ function Singer(props) {
   function handleScroll(pos) {
     // TODO 2020/5/5 : 根据pos不同有一些操作
     // 隐藏 collect button
-    console.log("pos: ", pos);
-    const headerDom = header.current;
+    const height = imageWrapperInitialHeight.current;
     const collectButtonDom = collectButton.current;
     const imgWrapperDom = imageWrapper.current;
-    const imgWrapperHeight = imgWrapperDom.getBoundingClientRect().height;
     const y = pos.y;
 
-    const minScrollY = -(imgWrapperHeight - OFFSET) + HEADER_HEIGHT;
+    const minScrollY = -(height - OFFSET) + HEADER_HEIGHT;
 
     // 滑动相对图片的高度百分比
-    const percent = Math.abs(y / imgWrapperHeight);
+    const percent = Math.abs(y / height);
 
     if (y > 0) {
-      // 下拉图片放大
+      // 下拉
       imgWrapperDom.style.transform = `scale(${1 + percent})`;
-
-      // 按钮下移
       collectButtonDom.style.transform = `translate3d(0, ${y}px, 0)`;
     } else if (y >= minScrollY) {
+    	// 上滑，不超过header
+      imgWrapperDom.style.paddingTop = "75%";
+      imgWrapperDom.style.height = 0;
+      imgWrapperDom.style.zIndex = -1;
+
       collectButtonDom.style.transform = `translate3d(0, ${y}px, 0)`;
       collectButtonDom.style.opacity = `${1 - percent * 2}`;
     } else if (y < minScrollY) {
-      // 往上移动，超过header
-      // 设置一个渐变的header颜色
+      // 上滑， 并超过header
+      imgWrapperDom.style.paddingTop = 0;
+      imgWrapperDom.style.zIndex = 51;
+      imgWrapperDom.style.height = `${HEADER_HEIGHT}px`;
     }
   }
 
@@ -160,6 +163,7 @@ function Singer(props) {
   const imageWrapper = useRef();
   const songsScrollWrapper = useRef();
   const songsScroll = useRef();
+  const imageWrapperInitialHeight = useRef(0);
 
   const OFFSET = 5;
 
@@ -167,8 +171,7 @@ function Singer(props) {
     const h = imageWrapper.current.offsetHeight;
     songsScrollWrapper.current.style.top = `${h - OFFSET}px`;
 
-    console.log(songsScroll);
-    // songsScroll.current.refresh();
+    imageWrapperInitialHeight.current = h;
   });
 
   return (
