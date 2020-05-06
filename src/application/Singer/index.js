@@ -6,17 +6,15 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import {
-  ByLayer,
-  CollectButton,
-  Container,
-  ImgWrapper,
-  SongListWrapper
-} from "./style";
+import { CollectButton, Container, ImgWrapper, SongListWrapper } from "./style";
 import Header from "../../baseUI/header";
 import Scroll from "../../components/scroll";
 import SongsList from "../SongList";
 import { HEADER_HEIGHT } from "../Album";
+import { useDispatch, useSelector } from "react-redux";
+import { getSingerInfoRequest } from "../../api/request";
+import { getSingerInfo } from "./store/actionCreator";
+import { actionTypes } from "../Singers/store";
 
 const artist = {
   picUrl:
@@ -113,6 +111,14 @@ const artist = {
 
 function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
+  const id = props.match.params.id;
+
+  const { artist, songs, loading } = useSelector(state => {
+    const { singer } = state;
+    return singer;
+  });
+
+  const dispatch = useDispatch();
 
   // handle back
   function handleBack() {
@@ -138,7 +144,7 @@ function Singer(props) {
       imgWrapperDom.style.transform = `scale(${1 + percent})`;
       collectButtonDom.style.transform = `translate3d(0, ${y}px, 0)`;
     } else if (y >= minScrollY) {
-    	// 上滑，不超过header
+      // 上滑，不超过header
       imgWrapperDom.style.paddingTop = "75%";
       imgWrapperDom.style.height = 0;
       imgWrapperDom.style.zIndex = -1;
@@ -174,6 +180,13 @@ function Singer(props) {
     imageWrapperInitialHeight.current = h;
   });
 
+  useEffect(
+    () => {
+      dispatch(getSingerInfo(id));
+    },
+    [id]
+  );
+
   return (
     <CSSTransition
       in={showStatus}
@@ -185,7 +198,7 @@ function Singer(props) {
     >
       <Container>
         <Header ref={header} hitle={"头部"} handleClick={handleBack} />
-        <ImgWrapper bgUrl={artist.picUrl} ref={imageWrapper} />
+        <ImgWrapper bgUrl={artist?.picUrl} ref={imageWrapper} />
         <CollectButton ref={collectButton}>
           <i className="iconfont">&#xe62d;</i>
           <span className="text">收藏</span>
@@ -195,7 +208,7 @@ function Singer(props) {
           <Scroll ref={songsScroll} onScroll={handleScroll}>
             <SongsList
               showBackground={true}
-              songs={artist.hotSongs}
+              songs={songs}
               showCollect={false}
             />
           </Scroll>

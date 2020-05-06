@@ -19,3 +19,8 @@ export const CHANGE_PULLDOWN_LOADING = "singers/CHANGE_PULLDOWN_LOADING";
 
 // 专辑
 export const CHANGE_CURRENT_ALBUM = "album/CHANGE_CURRENT_ALBUM";
+
+// 歌手
+export const CHANGE_ARTIST = 'singer/CHANGE_ARTIST';
+export const CHANGE_ARTIST_SONG = 'singer/CHANGE_ARTIST_SONG';
+
