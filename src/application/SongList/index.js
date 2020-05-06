@@ -72,7 +72,7 @@ const SongsList = React.forwardRef((props, refs) => {
 });
 
 SongsList.propTypes = {
-  collectCount: PropTypes.number.isRequired,
+  collectCount: PropTypes.number,
   showCollect: PropTypes.bool,
   songs: PropTypes.array,
   showBackground: PropTypes.bool,

@@ -4,7 +4,11 @@
  * @Date: 2020/5/6
  */
 import produce from "immer";
-import { CHANGE_ARTIST, CHANGE_ARTIST_SONG } from "../../../constants";
+import {
+  CHANGE_ARTIST,
+  CHANGE_ARTIST_SONG,
+  CHANGE_ENTER_LOADING
+} from "../../../constants";
 
 const initialState = {
   loading: true, // 进入时的loading态
@@ -19,6 +23,9 @@ export default produce((draft = initialState, action) => {
       break;
     case CHANGE_ARTIST_SONG:
       draft.songs = action.data;
+      break;
+    case CHANGE_ENTER_LOADING:
+      draft.loading = action.data;
       break;
     default:
       return draft;

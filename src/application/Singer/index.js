@@ -12,113 +12,21 @@ import Scroll from "../../components/scroll";
 import SongsList from "../SongList";
 import { HEADER_HEIGHT } from "../Album";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingerInfoRequest } from "../../api/request";
-import { getSingerInfo } from "./store/actionCreator";
-import { actionTypes } from "../Singers/store";
-
-const artist = {
-  picUrl:
-    "https://p2.music.126.net/W__FCWFiyq0JdPtuLJoZVQ==/109951163765026271.jpg",
-  name: "薛之谦",
-  hotSongs: [
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    },
-    {
-      name: "我好像在哪见过你",
-      ar: [{ name: "薛之谦" }],
-      al: {
-        name: "薛之谦专辑"
-      }
-    }
-    // 省略 20 条
-  ]
-};
+import { changeEnterLoading, getSingerInfo } from "./store/actionCreator";
+import Loading from "../../components/loading";
 
 function Singer(props) {
   const [showStatus, setShowStatus] = useState(true);
   const id = props.match.params.id;
+  const dispatch = useDispatch();
 
   const { artist, songs, loading } = useSelector(state => {
+    console.log(state);
     const { singer } = state;
     return singer;
   });
 
-  const dispatch = useDispatch();
+  console.log("loading: ", loading);
 
   // handle back
   function handleBack() {
@@ -182,6 +90,7 @@ function Singer(props) {
 
   useEffect(
     () => {
+      dispatch(changeEnterLoading(true));
       dispatch(getSingerInfo(id));
     },
     [id]
@@ -197,7 +106,8 @@ function Singer(props) {
       onExited={props.history.goBack}
     >
       <Container>
-        <Header ref={header} hitle={"头部"} handleClick={handleBack} />
+        <Header ref={header} title={"头部"} handleClick={handleBack} />
+        {loading ? <Loading /> : null}
         <ImgWrapper bgUrl={artist?.picUrl} ref={imageWrapper} />
         <CollectButton ref={collectButton}>
           <i className="iconfont">&#xe62d;</i>

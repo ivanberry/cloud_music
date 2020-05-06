@@ -23,7 +23,6 @@ export const getAlbumList = id => {
   return dispatch => {
     getAlbumDetailRequest(id)
       .then(res => {
-        console.log(res);
         const { playlist } = res;
         dispatch(changeCurrentAlbum(playlist));
         dispatch(changeEnterLoading(false));
