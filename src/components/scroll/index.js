@@ -17,9 +17,9 @@ import BScroll from "better-scroll";
 import { PullDownLoader, PullUpLoader, ScrollContainer } from "./style";
 import Loading from "../../baseUI/loading";
 import { debounce } from "../../api/utils";
+import LoadingV2 from "../../baseUI/loading-v2";
 
 const Scroll = forwardRef((props, ref) => {
-  // TODO 2020/4/28 tab: 编写组件
   const [bScroll, setBScroll] = useState();
   const scrollContainerRef = useRef();
 
@@ -33,7 +33,7 @@ const Scroll = forwardRef((props, ref) => {
     bounceBottom,
     pullUp,
     pullDown,
-    onScroll,
+    onScroll
   } = props;
 
   const pullUpDebounce = useMemo(
@@ -130,22 +130,23 @@ const Scroll = forwardRef((props, ref) => {
     getBScroll: () => bScroll
   }));
 
-  const pullUpdisplayStyle = pullUpLoading
+  const pullUpDisplayStyle = pullUpLoading
     ? { display: "" }
     : { display: "none" };
-  const pullDowndisplayStyle = pullDownLoading
+  const pullDownDisplayStyle = pullDownLoading
     ? { display: "" }
     : { display: "none" };
 
-  // TODO 2020/4/28 tab: UI
+  console.log(2, pullDownDisplayStyle);
+
   return (
     <ScrollContainer ref={scrollContainerRef}>
       {props.children}
-      <PullDownLoader style={pullDowndisplayStyle}>
+      <PullDownLoader style={pullDownDisplayStyle}>
         <Loading />
       </PullDownLoader>
-      <PullUpLoader style={pullUpdisplayStyle}>
-        <Loading />
+      <PullUpLoader style={pullUpDisplayStyle}>
+        <LoadingV2 />
       </PullUpLoader>
     </ScrollContainer>
   );

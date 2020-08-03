@@ -26,5 +26,7 @@ export default produce((draft = initialState, action) => {
     case SET_CURRENT_INDEX:
       draft.currentSong = action.data;
       break;
+    default:
+      break;
   }
 });

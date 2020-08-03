@@ -8,6 +8,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { actionTypes } from "./store";
 import Loading from "../../components/loading";
 import { renderRoutes } from "react-router-config";
+import { changePullDownLoading } from "./store/actionCreator";
 
 // mock data
 export const categoryTypes = [
@@ -189,22 +190,24 @@ function Singers(props) {
   /**
    * 利用useSelector获取redux中的数据
    */
-  const {
-    list: hotSingerList,
-    enterLoading,
-    pullUpLoading,
-    pullDownLoading
-  } = useSelector(state => {
-    const { singers } = state;
-    return singers;
-  }, shallowEqual);
+  const { list, enterLoading, pullUpLoading, pullDownLoading } = useSelector(
+    state => {
+      const { singers } = state;
+      return singers;
+    },
+    shallowEqual
+  );
 
   /**
-   * 获取歌手列表数据
+   * 获取热门歌手列表数据
    */
-  useEffect(() => {
-    dispatch(actionTypes.getHotSingerList());
-  }, []);
+  useEffect(
+    () => {
+      dispatch(actionTypes.getHotSingerList());
+      dispatch(actionTypes.changeEnterLoading(false));
+    },
+    [dispatch]
+  );
 
   /**
    * 需要联动列表
@@ -224,24 +227,24 @@ function Singers(props) {
     setCategory(val);
   }
 
-  // 加载更多
+  // TODO 2020/4/30 : 上滑加载更多
   function handlePullUpDispatch() {
-    // TODO 2020/4/30 : pull up ui
     dispatch(actionTypes.changePullUpLoading(true));
     if (category === "" && alpha === "") {
-      // 加载更多热门
       dispatch(actionTypes.refreshMoreHotSingerList());
     } else {
       dispatch(actionTypes.refreshMoreSingerList(category, alpha));
     }
-    dispatch(actionTypes.changePullUpLoading(false));
   }
 
-  // 重新加载
+  // TODO 2020/4/30 : 下拉刷新逻辑
   function handlePullDownDispatch() {
-    // TODO 2020/4/30 : 下拉刷新逻辑
-    dispatch(actionTypes.changeEnterLoading(true));
-    dispatch(actionTypes.getSingerList(category, alpha));
+    dispatch(changePullDownLoading(true));
+    if (category === "" && alpha === "") {
+      dispatch(actionTypes.getHotSingerList());
+    } else {
+      dispatch(actionTypes.getSingerList(category, alpha));
+    }
   }
 
   function enterSingerDetail(id) {
@@ -251,13 +254,16 @@ function Singers(props) {
   function singerListRender() {
     return (
       <List>
-        {hotSingerList.map(item => {
+        {list.map(item => {
           return (
             <ListItem onClick={() => enterSingerDetail(item.id)} key={item.id}>
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
-                    <img src={require("../../asserts/avatar.png")} />
+                    <img
+                      alt="歌手占位图"
+                      src={require("../../asserts/avatar.png")}
+                    />
                   }
                 >
                   <img src={item.picUrl} alt="歌手图片" />
@@ -272,8 +278,9 @@ function Singers(props) {
     );
   }
 
+  console.log(1, pullDownLoading);
+
   return (
-    // TODO 2020/4/29 :  歌手筛选页面
     <>
       <NavContainer>
         <Horizon
@@ -294,7 +301,7 @@ function Singers(props) {
           pullDown={handlePullDownDispatch}
           pullUp={handlePullUpDispatch}
           pullDownLoading={pullDownLoading}
-          // pullUpLoading={pullUpLoading}
+          pullUpLoading={pullUpLoading}
           onScroll={forceCheck}
         >
           <div style={{ minHeight: "100%" }}>

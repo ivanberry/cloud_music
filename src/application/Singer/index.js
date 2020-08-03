@@ -6,7 +6,13 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { CollectButton, Container, ImgWrapper, SongListWrapper } from "./style";
+import {
+  ByLayer,
+  CollectButton,
+  Container,
+  ImgWrapper,
+  SongListWrapper
+} from "./style";
 import Header from "../../baseUI/header";
 import Scroll from "../../components/scroll";
 import SongsList from "../SongList";
@@ -21,14 +27,10 @@ function Singer(props) {
   const dispatch = useDispatch();
 
   const { artist, songs, loading } = useSelector(state => {
-    console.log(state);
     const { singer } = state;
     return singer;
   });
 
-  console.log("loading: ", loading);
-
-  // handle back
   function handleBack() {
     props.history.goBack();
   }
@@ -113,7 +115,7 @@ function Singer(props) {
           <i className="iconfont">&#xe62d;</i>
           <span className="text">收藏</span>
         </CollectButton>
-        {/*<ByLayer/>*/}
+        <ByLayer />
         <SongListWrapper ref={songsScrollWrapper}>
           <Scroll ref={songsScroll} onScroll={handleScroll}>
             <SongsList

@@ -27,8 +27,8 @@ export const PullUpLoader = styled.div`
   left: 0;
   right: 0;
   bottom: 5px;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   margin: auto;
   z-index: 2;
 `;

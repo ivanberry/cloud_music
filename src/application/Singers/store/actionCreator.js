@@ -71,7 +71,7 @@ export const getHotSingerList = () => {
         const { artists } = res;
         dispatch(changeOffset(artists.length));
         dispatch(changeSingerList(artists));
-        dispatch(changeEnterLoading(false));
+        dispatch(changePullDownLoading(false));
       })
       .catch(err => console.log("热门歌手数据获取失败"));
   };
@@ -85,7 +85,6 @@ export const refreshMoreHotSingerList = () => {
     const {
       singers: { list, offset }
     } = getState();
-    console.log('offset: ', offset);
     getHotSingerListRequest(offset)
       .then(res => {
         const { artists } = res;
@@ -111,8 +110,8 @@ export const getSingerList = (category, alpha) => {
         const { artists } = res;
         dispatch(changeOffset(artists.length));
         dispatch(changeSingerList(artists));
-        // TODO 2020/5/1 : 如何绑定不同的loading状态呢？
         dispatch(changeEnterLoading(false));
+        dispatch(changePullDownLoading(false));
       })
       .catch(err => console.log(err));
   };
@@ -128,7 +127,6 @@ export const refreshMoreSingerList = (category, alpha) => {
     const {
       singers: { list, offset }
     } = getState();
-    console.log('offset: ', offset);
     getSingerListRequest(category, alpha, offset)
       .then(res => {
         const { artists } = res;
@@ -139,4 +137,4 @@ export const refreshMoreSingerList = (category, alpha) => {
       })
       .catch(err => console.log(err));
   };
-}
+};
