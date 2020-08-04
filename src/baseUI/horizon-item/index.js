@@ -15,7 +15,6 @@ function Horizon(props) {
 
   const category = useRef(null);
 
-  // TODO 2020/4/29 :  初始化内容容器宽度，使其跟内容绑定
   useEffect(() => {
     let categoryDOM = category.current;
     let tagElems = categoryDOM.querySelectorAll("span");
@@ -25,9 +24,6 @@ function Horizon(props) {
     });
     categoryDOM.style.width = `${totalWidth}px`;
   }, []);
-
-  // TODO 2020/4/29 : 为什么每次调用组件，都会渲染两次呢？
-  // console.log("xxx", curVal);
 
   // TODO 2020/4/29 : 如何优化onClick导致的回调产生的多次渲染
   return (
@@ -95,4 +91,4 @@ Horizon.propTypes = {
   handleClick: PropTypes.func
 };
 
-export default Horizon;
+export default React.memo(Horizon);

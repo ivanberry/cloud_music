@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import LazyLoad, { forceCheck } from "react-lazyload";
 
 import Horizon from "../../baseUI/horizon-item";
@@ -9,6 +9,8 @@ import { actionTypes } from "./store";
 import Loading from "../../components/loading";
 import { renderRoutes } from "react-router-config";
 import { changePullDownLoading } from "./store/actionCreator";
+import { CategoryDataContext, Data } from "./data";
+import { CHANGE_ALPHA, CHANGE_CATEGORY } from "../../constants";
 
 // mock data
 export const categoryTypes = [
@@ -183,10 +185,13 @@ export const alphaTypes = [
 ];
 
 function Singers(props) {
-  const [category, setCategory] = useState("");
-  const [alpha, setAlpha] = useState("");
+  const { data, dispatch: localDispatch } = useContext(CategoryDataContext);
 
+  const { category, alpha } = data;
+
+  // dispatch from redux
   const dispatch = useDispatch();
+
   /**
    * 利用useSelector获取redux中的数据
    */
@@ -210,24 +215,30 @@ function Singers(props) {
   );
 
   /**
-   * 需要联动列表
-   * @param val
+   * 改变分类或首字母后，重置offset, 重新请求不同歌手列表
+   * @param category
+   * @param alpha
    */
-  function handleUpdateAlpha(val) {
+  function updateDispatch(category, alpha) {
     dispatch(actionTypes.changeOffset(0));
     dispatch(actionTypes.changeEnterLoading(true));
-    dispatch(actionTypes.getSingerList(category, val));
-    setAlpha(val);
+    dispatch(actionTypes.getSingerList(category, alpha));
+  }
+
+  /**
+   * 首字母更新，发起请求
+   * @param val: 首字母
+   */
+  function handleUpdateAlpha(val) {
+    localDispatch({ type: CHANGE_ALPHA, data: val });
+    updateDispatch(category, val);
   }
 
   function handleUpdateCategory(val) {
-    dispatch(actionTypes.changeOffset(0));
-    dispatch(actionTypes.changeEnterLoading(true));
-    dispatch(actionTypes.getSingerList(val, alpha));
-    setCategory(val);
+    localDispatch({ type: CHANGE_CATEGORY, data: val });
+    updateDispatch(val, alpha);
   }
 
-  // TODO 2020/4/30 : 上滑加载更多
   function handlePullUpDispatch() {
     dispatch(actionTypes.changePullUpLoading(true));
     if (category === "" && alpha === "") {
@@ -237,7 +248,6 @@ function Singers(props) {
     }
   }
 
-  // TODO 2020/4/30 : 下拉刷新逻辑
   function handlePullDownDispatch() {
     dispatch(changePullDownLoading(true));
     if (category === "" && alpha === "") {
@@ -278,10 +288,8 @@ function Singers(props) {
     );
   }
 
-  console.log(1, pullDownLoading);
-
   return (
-    <>
+    <Data>
       <NavContainer>
         <Horizon
           list={categoryTypes}
@@ -310,7 +318,7 @@ function Singers(props) {
         </Scroll>
       </ListContainer>
       {renderRoutes(props.route.routes)}
-    </>
+    </Data>
   );
 }
 

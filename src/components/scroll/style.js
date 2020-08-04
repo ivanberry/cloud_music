@@ -11,7 +11,6 @@ export const ScrollContainer = styled.div`
   overflow: hidden;
 `;
 
-// TODO 2020/4/30 : pull down director
 export const PullDownLoader = styled.div`
   position: absolute;
   top: 0;
@@ -21,7 +20,6 @@ export const PullDownLoader = styled.div`
   z-index: 2;
 `;
 
-// TODO 2020/4/30 : pull up  director
 export const PullUpLoader = styled.div`
   position: absolute;
   left: 0;
