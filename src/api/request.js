@@ -57,3 +57,11 @@ export const getAlbumDetailRequest = id => {
 export const getSingerInfoRequest = id => {
   return axiosInstance.get(`/artists?id=${id}`);
 };
+
+/**
+ * 获取排行榜
+ * @return {Promise<AxiosResponse<any>>}
+ */
+export const getRankerListRequest = () => {
+  return axiosInstance.get("/toplist/detail");
+};
