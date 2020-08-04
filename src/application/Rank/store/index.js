@@ -48,7 +48,7 @@ const reducer = produce((draft = initialState, action) => {
       draft.loading = action.data;
       break;
     default:
-      break;
+      return draft;
   }
 });
 
